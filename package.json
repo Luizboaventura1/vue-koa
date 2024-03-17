@@ -1,7 +1,7 @@
 {
-  "name": "vue-project",
-  "version": "0.0.0",
-  "private": true,
+  "name": "vue-koa",
+  "version": "0.5.0",
+  "private": false,
   "type": "module",
   "scripts": {
     "dev": "vite",
