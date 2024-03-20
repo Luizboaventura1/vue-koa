@@ -3,25 +3,28 @@ import type { Notification } from "@/types/Notification";
 import { ref, type Ref } from "vue";
 
 export default function useToast(): ToastInterface {
-  let toasts: Ref<Notification[]> = ref([]);
+  let toastList: Ref<Notification[]> = ref([]);
 
   const add = (newToast: Notification): void => {
-    toasts.value.unshift(newToast);
+    toastList.value.unshift(newToast);
 
     let timeout = newToast.timeout ? newToast.timeout : 2000;
 
-    // Delete toast after timeout
     setTimeout(() => {
-      let index = toasts.value.indexOf(newToast);
-      
-      if (index !== -1) {
-        toasts.value.splice(index, 1);
-      }
+      removeToast(newToast)
     }, timeout);
+
+  };
+
+  const removeToast = (toast: Notification): void => {
+    const index = toastList.value.indexOf(toast);
+    if (index !== -1) {
+      toastList.value.splice(index, 1);
+    }
   };
 
   return {
-    toasts,
+    toastList,
     add,
   };
 }
