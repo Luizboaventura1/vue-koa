@@ -2,8 +2,7 @@
   <div class="absolute right-3 top-3 overflow-hidden">
     <TransitionGroup name="list" tag="ul" class="grid gap-y-1 p-1">
       <li
-        :style="`animation-duration: ${toast.timeout};`"
-        v-for="(toast, index) in props.toast.toasts.value"
+        v-for="(toast, index) in props.toast.toastList.value"
         :key="index"
         class="w-[300px] h-full min-h-[50px] relative bg-primary-color border border-zinc-600 shadow rounded-md text-text-primary-color p-4 flex items-center overflow-hidden"
         :class="props.toastStyle"
@@ -13,7 +12,9 @@
         <div class="absolute bottom-0 left-0 w-full h-[3px]">
           <div
             class="bar h-full"
-            :style="`animation-duration: ${toast.timeout}ms;`"
+            :style="{
+              animationDuration: `${toast.timeout ? toast.timeout : 2000}ms`,
+            }"
           ></div>
         </div>
       </li>
@@ -29,9 +30,11 @@ const props = defineProps<{ toast: ToastInterface; toastStyle?: string }>();
 </script>
 
 <style scoped>
+
 .list-enter-active {
   transition: all 0.5s ease;
 }
+
 .list-enter-from,
 .list-leave-to {
   opacity: 0;
@@ -40,8 +43,8 @@ const props = defineProps<{ toast: ToastInterface; toastStyle?: string }>();
 
 .bar {
   animation-name: bar;
-  animation-duration: 2s;
   animation-timing-function: linear;
+  animation-fill-mode: forwards;
   background-color: #39b883;
   width: 0;
 }
