@@ -28,3 +28,11 @@ toast.add({
   timeout: 3000 // default is 2000
 })
 ```
+Use the `toast-style` prop to change the style of the toast
+```js
+  <Toast
+    toast-style="flex items-center w-[300px] h-[55px] bg-primary-color border border-zinc-600 mb-1 shadow rounded-md text-text-primary-color p-4 overflow-hidden truncate"
+    :toast="toast"
+  />
+```
+Compatible with tailwindcss only
