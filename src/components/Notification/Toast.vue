@@ -1,10 +1,14 @@
 <template>
-  <div class="absolute right-0 top-0 h-full p-3">
-    <TransitionGroup name="list" tag="ul" class="p-1 toasts h-full overflow-hidden">
+  <div id="wrapper-toast" class="absolute right-0 top-0 p-3">
+    <TransitionGroup
+      name="list"
+      tag="ul"
+      class="p-1 toasts h-full overflow-hidden"
+    >
       <li
         v-for="(toast, index) in props.toast.toastList.value"
         :key="index"
-        class="w-[300px] h-[55px] bg-primary-color border border-zinc-600 mb-1 shadow rounded-md text-text-primary-color p-4 flex items-center overflow-hidden"
+        class="flex items-center w-[300px] h-[55px] bg-primary-color border border-zinc-600 mb-1 shadow rounded-md text-text-primary-color p-4 overflow-hidden truncate"
         :class="props.toastStyle"
       >
         {{ toast.title }}
@@ -15,8 +19,40 @@
 
 <script setup lang="ts">
 import type { ToastInterface } from "@/types/ToastInterface";
+import { ref, onMounted, watch } from "vue";
 
 const props = defineProps<{ toast: ToastInterface; toastStyle?: string }>();
+
+// Reference for the wrapper-toast element
+let wrapperToast = ref<HTMLElement | null>();
+
+// Function executed after the component is mounted
+onMounted(() => {
+  wrapperToast.value = document.getElementById("wrapper-toast");
+});
+
+// Watcher to monitor changes in the toast list
+watch(
+  () => props.toast.toastList,
+  () => {
+    if (wrapperToast.value) {
+      let windowHeight = window.innerHeight;
+      const scroll_margin = 50;
+
+      // Check if the height of the wrapperToast element, considering the scroll margin, exceeds the window height
+      const isHeightExceedingWindow =
+        wrapperToast.value.offsetHeight + scroll_margin >= windowHeight;
+
+      // Add or remove the 'h-full' class based on the condition
+      if (isHeightExceedingWindow) {
+        wrapperToast.value.classList.add("h-full");
+      } else {
+        wrapperToast.value.classList.remove("h-full");
+      }
+    }
+  },
+  { deep: true }
+);
 </script>
 
 <style scoped>
